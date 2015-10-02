@@ -12,6 +12,8 @@ Python script to generate docx file with contents of directory structure
       -p PATH, --path PATH  Top level directory path to scan
       -o OUTFILE, --outfile OUTFILE
                             Name of output file
+      -i IGNORE [IGNORE ...], --ignore IGNORE [IGNORE ...]
+                            File extensions to ignore and not add to the docx
       -v, --verbose         verbose
 
 ## Installation

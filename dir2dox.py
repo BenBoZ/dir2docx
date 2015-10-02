@@ -44,6 +44,11 @@ def add_dir_to_dox(dir_path, document, lvl):
 
 def add_file_to_docx(path, document, lvl):
 
+    extension = path.split(".")[-1]
+    if extension in args.ignore:
+        log("Skipping %s" % path)
+        return 
+
     log("Adding %s" % path)
 
     title = os.path.basename(path)
@@ -63,6 +68,9 @@ if __name__ == '__main__':
     parser.add_argument("-o","--outfile", type=str,
                     default="output.docx",
                     help="Name of output file")
+    parser.add_argument("-i","--ignore", nargs='+', type=str, 
+                    default=["exe"],
+                    help="File extensions to ignore and not add to the docx")
     parser.add_argument("-v", "--verbose", action="store_true",
                     help="verbose")
 
