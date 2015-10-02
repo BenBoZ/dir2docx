@@ -16,11 +16,20 @@ def generate_docx(path, outfile, lvl=1):
 
     document.save(outfile)
 
+def all_files_in_dir(dir_path):
+   
+    dir_entries = sorted(os.listdir(dir_path))
+
+    if not args.all:
+        dir_entries = [entry for entry in dir_entries if not entry.startswith('.')]
+
+    return dir_entries
+
 def add_dir_to_dox(dir_path, document, lvl):
 
     log("Entering %s" % dir_path)
 
-    dir_entries = sorted(os.listdir(dir_path))
+    dir_entries = all_files_in_dir(dir_path)
 
     title = os.path.basename(dir_path)
 
@@ -46,6 +55,8 @@ def add_file_to_docx(path, document, lvl):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("-a","--all", action="store_true",
+                    help="Parse all files and don't skip over hidden files & folders")
     parser.add_argument("-p","--path", type=str,
                     default=".",
                     help="Top level directory path to scan")
