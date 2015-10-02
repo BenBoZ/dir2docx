@@ -31,13 +31,14 @@ def add_dir_to_dox(dir_path, document, lvl):
 
     dir_entries = all_files_in_dir(dir_path)
 
-    title = os.path.basename(dir_path)
-
     for entry in dir_entries:
         path = os.path.join(dir_path, entry)
 
         if os.path.isdir(path):
+
+            (_, title) = os.path.split(path)
             document.add_heading(title, lvl)
+
             add_dir_to_dox(path, document, lvl+1)
         else:
             add_file_to_docx(path, document, lvl)
