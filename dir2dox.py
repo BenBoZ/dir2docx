@@ -2,6 +2,8 @@
 import os
 import argparse
 from docx import Document
+from docx.enum.style import WD_STYLE_TYPE
+from docx.shared import Pt
 
 def log(txt):
 
@@ -11,10 +13,22 @@ def log(txt):
 def generate_docx(path, outfile, lvl=1):
 
     document = Document()
+    document = create_code_style(document)
+ 
 
     add_dir_to_dox(path, document, lvl)
 
     document.save(outfile)
+
+def create_code_style(document):
+
+    obj_styles = document.styles
+    codestyle = obj_styles.add_style('Code_style', WD_STYLE_TYPE.PARAGRAPH)
+    codestyle.base_style = obj_styles['Normal']
+    codestyle.font.size = Pt(9)
+    codestyle.font.name = 'Consolas'
+
+    return document
 
 def all_files_in_dir(dir_path):
    
@@ -56,8 +70,15 @@ def add_file_to_docx(path, document, lvl):
 
     document.add_heading(title, lvl)
 
+    if os.path.splitext(path)[-1] in ['.txt','.md','.markdown']:
+        style = 'Normal'
+    else:
+        style = 'Code_style'
+
+    log("> Applying {style} style for {ext}".format(ext=os.path.splitext(path), style=style))
+
     with open(path) as f:
-        p = document.add_paragraph(f.read())
+        p = document.add_paragraph(f.read(), style=style)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
